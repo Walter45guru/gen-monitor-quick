@@ -1,26 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import Gauge from '../components/Gauge';
-
-// Helper to generate a single random data point
-const generateRandomData = () => ({
-  L1: Math.round(Math.random() * 300),
-  L2: Math.round(Math.random() * 300),
-  L3: Math.round(Math.random() * 300),
-  GEN: Math.round(Math.random() * 300),
-});
+import { fetchGeneratorData } from '../api/generatorApi';
 
 const GeneratorPage = () => {
-  // Generate 15 random data points on mount
-  const [dummyData] = useState(() => Array.from({ length: 15 }, generateRandomData));
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const { L1, L2, L3, GEN } = dummyData[currentIndex];
+  const [data, setData] = useState(null);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % dummyData.length);
-    }, 8000); // 8 seconds
+    const fetchData = async () => {
+      const result = await fetchGeneratorData();
+      setData(result);
+    };
+    fetchData();
+    const interval = setInterval(fetchData, 8000); // Fetch data every 8 seconds
     return () => clearInterval(interval);
-  }, [dummyData.length]);
+  }, []);
+
+  if (!data) return <div>Loading...</div>;
+
+  const { L1, L2, L3, GEN } = data;
 
   return (
     <div className="min-h-screen bg-gray-800 text-white p-4">

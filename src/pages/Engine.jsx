@@ -1,27 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Gauge from '../components/Gauge';
 
-// Helper to generate a single random engine data point
-const generateRandomEngineData = () => ({
-  oilPressure: Math.round(Math.random() * 50),      // 0-50 PSI
-  coolantTemp: Math.round(Math.random() * 120),     // 0-120 °C
-  fuelLevel: Math.round(Math.random() * 100),       // 0-100 %
-  batteryVoltage: Math.round(Math.random() * 30),   // 0-30 V
-  chargeAltVoltage: Math.round(Math.random() * 30), // 0-30 V
-});
+// Removed unused generateRandomEngineData function
 
 const Engine = () => {
   // Generate 15 random data points on mount
-  const [dummyData] = useState(() => Array.from({ length: 15 }, generateRandomEngineData));
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const { oilPressure, coolantTemp, fuelLevel, batteryVoltage, chargeAltVoltage } = dummyData[currentIndex];
+  // const [dummyData] = useState(() => Array.from({ length: 15 }, generateRandomEngineData));
+  // const [currentIndex, setCurrentIndex] = useState(0);
+  // const { oilPressure, coolantTemp, fuelLevel, batteryVoltage, chargeAltVoltage } = dummyData[currentIndex];
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setCurrentIndex((prev) => (prev + 1) % dummyData.length);
+  //   }, 8000); // 8 seconds
+  //   return () => clearInterval(interval);
+  // }, [dummyData.length]);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % dummyData.length);
-    }, 8000); // 8 seconds
-    return () => clearInterval(interval);
-  }, [dummyData.length]);
+  const [oilPressure] = useState(0);
+  const [coolantTemp] = useState(0);
+  const [fuelLevel] = useState(0);
+  const [batteryVoltage] = useState(0);
+  const [chargeAltVoltage] = useState(0);
 
   return (
     <div className="p-4 bg-gray-800 min-h-screen text-white">
@@ -99,7 +97,7 @@ const Engine = () => {
               </tr>
             </thead>
             <tbody>
-              {dummyData.map((row, idx) => (
+              {/* {dummyData.map((row, idx) => (
                 <tr key={idx} className={idx === currentIndex ? 'bg-blue-800 font-bold' : 'bg-gray-800'}>
                   <td className="px-2 py-1">{idx + 1}</td>
                   <td className="px-2 py-1">{row.oilPressure}</td>
@@ -108,7 +106,7 @@ const Engine = () => {
                   <td className="px-2 py-1">{row.batteryVoltage}</td>
                   <td className="px-2 py-1">{row.chargeAltVoltage}</td>
                 </tr>
-              ))}
+              ))} */}
             </tbody>
           </table>
         </div>

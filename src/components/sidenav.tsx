@@ -1,7 +1,7 @@
 // src/components/Sidenav.jsx
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import logo from '../assets/Strathmore-University-Logo-White.png';
+import logo from '../assets/logo_logo.png';
 
 const Sidenav = () => {
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ const Sidenav = () => {
     <aside className="w-64 bg-blue-900 text-white min-h-screen p-4">
       {/* Logo at the top */}
       <div className="flex justify-center mb-8">
-        <img src={logo} alt="Logo" className="h-32 w-auto" />
+        <img src={logo} alt="Logo" className="h-20 w-auto" />
       </div>
       <nav className="flex flex-col space-y-4">
         <Link to="/generator/gauges" className="block px-3 py-2 hover:bg-blue-800 rounded">

@@ -1,67 +1,67 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { jsPDF } from 'jspdf';
 
 const Alarm = () => {
-  // In a real application, this data might be fetched from an API/WebSocket.
-  const [sensorData, setSensorData] = useState({
-    // Example sensor readings from generator and engine:
-    sensors: [
-      {
-        component: "Generator",
-        parameter: "Voltage",
-        value: 140,       // measured value
-        threshold: 180,   // warning if below threshold
-        unit: "V",
-        warning: "Voltage too low",
-      },
-      {
-        component: "Engine",
-        parameter: "Fuel Level",
-        value: 15,
-        threshold: 20,    // warning if below threshold
-        unit: "%",
-        warning: "Fuel level too low",
-      },
-      {
-        component: "Engine",
-        parameter: "oil pressure",
-        value: 11,
-        threshold: 15,    // warning if below threshold
-        unit: "%",
-        warning: "Fuel level too low",
-      },
-      {
-        component: "Engine",
-        parameter: "Coolant Temp",
-        value: 210,
-        threshold: 180,    // warning if above threshold
-        unit: "%",
-        warning: "Fuel level too low",
-      },
-      
-    ],
-    lastShutdownTime: "2025-04-12 14:35:00",
-    electricTrip: "NULL",  // update with a timestamp if an electric trip occurs
+  const [sensorData] = useState({
+    sensors: [],
+    lastShutdownTime: "",
+    electricTrip: "",
   });
 
-  // Simulate sensor data update (e.g., using a WebSocket or polling API)
-  useEffect(() => {
-    // Replace this with your real data update mechanism
-    const interval = setInterval(() => {
-      setSensorData(prevData => ({
-        ...prevData,
-        sensors: prevData.sensors.map(sensor => {
-          // For simulation, randomly adjust sensor values (in a real app you get new data here)
-          const variation = Math.random() * 10 - 5;
-          return {
-            ...sensor,
-            value: Math.max(sensor.value + variation, 0)  // avoid negative values
-          };
-        }),
-      }));
-    }, 5000); // update every 5 seconds
-    return () => clearInterval(interval);
-  }, []);
+  // In a real application, this data might be fetched from an API/WebSocket.
+  // const [sensorData, setSensorData] = useState({
+  //   sensors: [
+  //     {
+  //       component: "Generator",
+  //       parameter: "Voltage",
+  //       value: 140,
+  //       threshold: 180,
+  //       unit: "V",
+  //       warning: "Voltage too low",
+  //     },
+  //     {
+  //       component: "Engine",
+  //       parameter: "Fuel Level",
+  //       value: 15,
+  //       threshold: 20,
+  //       unit: "%",
+  //       warning: "Fuel level too low",
+  //     },
+  //     {
+  //       component: "Engine",
+  //       parameter: "oil pressure",
+  //       value: 11,
+  //       threshold: 15,
+  //       unit: "%",
+  //       warning: "Fuel level too low",
+  //     },
+  //     {
+  //       component: "Engine",
+  //       parameter: "Coolant Temp",
+  //       value: 210,
+  //       threshold: 180,
+  //       unit: "%",
+  //       warning: "Fuel level too low",
+  //     },
+  //   ],
+  //   lastShutdownTime: "2025-04-12 14:35:00",
+  //   electricTrip: "NULL",
+  // });
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setSensorData(prevData => ({
+  //       ...prevData,
+  //       sensors: prevData.sensors.map(sensor => {
+  //         const variation = Math.random() * 10 - 5;
+  //         return {
+  //           ...sensor,
+  //           value: Math.max(sensor.value + variation, 0)
+  //         };
+  //       }),
+  //     }));
+  //   }, 5000);
+  //   return () => clearInterval(interval);
+  // }, []);
 
   // Create alarms dynamically: only include sensors that are below (or above)
   // threshold. Adjust the condition based on the parameter requirements.
