@@ -3,6 +3,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import NewGeneratorData
 from .serializers import NewGeneratorDataSerializer
+from django.http import HttpResponse
+from django.utils import timezone
+import csv
 
 @api_view(['POST'])
 def receive_generator_data(request):
@@ -75,4 +78,19 @@ def receive_generator_data(request):
         serializer = NewGeneratorDataSerializer(generator_data)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     except Exception as e:
-        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST) 
+        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def generator_data_csv(request):
+    days = int(request.GET.get('days', 1))
+    days = min(max(days, 1), 30)  # Clamp between 1 and 30
+    since = timezone.now() - timezone.timedelta(days=days)
+    queryset = NewGeneratorData.objects.filter(timestamp__gte=since).order_by('-timestamp')
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = f'attachment; filename="generator_data_last_{days}_days.csv"'
+    writer = csv.writer(response)
+    fields = [f.name for f in NewGeneratorData._meta.fields]
+    writer.writerow(fields)
+    for obj in queryset:
+        writer.writerow([getattr(obj, f) for f in fields])
+    return response 
