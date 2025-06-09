@@ -1,10 +1,9 @@
 import axios from 'axios';
-
-const GENERATOR_IP = '192.168.0.11';
+import config from '../config';
 
 export const fetchGeneratorData = async () => {
   try {
-    const response = await axios.get(`http://${GENERATOR_IP}/api/data`);
+    const response = await axios.get(`${config.API_URL}/api/generator-data/`);
     return response.data;
   } catch (error) {
     console.error('Error fetching generator data:', error);
