@@ -17,14 +17,19 @@ const GeneratorPage = () => {
 
   if (!data) return <div>Loading...</div>;
 
-  const { L1, L2, L3, GEN } = data;
+  const {
+    genset_l1_n_rms_voltage,
+    genset_l2_n_rms_voltage,
+    genset_l3_n_rms_voltage,
+    genset_frequency
+  } = data;
 
   return (
     <div className="min-h-screen bg-gray-800 text-white p-4">
       {/* Top Row Gauges */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-8">
         <Gauge
-          value={L1}
+          value={genset_l1_n_rms_voltage}
           max={300}
           label="L1-N"
           unit=" V"
@@ -35,7 +40,7 @@ const GeneratorPage = () => {
           ]}
         />
         <Gauge
-          value={L2}
+          value={genset_l2_n_rms_voltage}
           max={300}
           label="L2-N"
           unit=" V"
@@ -46,7 +51,7 @@ const GeneratorPage = () => {
           ]}
         />
         <Gauge
-          value={L3}
+          value={genset_l3_n_rms_voltage}
           max={300}
           label="L3-N"
           unit=" V"
@@ -57,14 +62,14 @@ const GeneratorPage = () => {
           ]}
         />
         <Gauge
-          value={GEN}
-          max={300}
-          label="GEN"
-          unit=" V"
+          value={genset_frequency}
+          max={100}
+          label="Frequency"
+          unit=" Hz"
           zones={[
-            { min: 0, max: 50, color: "#ef4444" },
-            { min: 50, max: 180, color: "#f59e0b" },
-            { min: 180, max: 300, color: "#22c55e" },
+            { min: 0, max: 40, color: "#ef4444" },
+            { min: 40, max: 50, color: "#f59e0b" },
+            { min: 50, max: 100, color: "#22c55e" },
           ]}
         />
       </div>

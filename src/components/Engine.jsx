@@ -4,11 +4,11 @@ import Gauge from './Gauge';
 const Engine = () => {
   // Simulated sensor values (in a real app, these come from sensors or API data)
   // Replace with real sensor data or websockets, etc.
-  const [oilPressure, setOilPressure] = useState(15);
-  const [coolantTemp, setCoolantTemp] = useState(80);
-  const [fuelLevel, setFuelLevel] = useState(40);
-  const [batteryVoltage, setBatteryVoltage] = useState(24);
-  const [chargeAltVoltage, setChargeAltVoltage] = useState(27);
+  const [oil_pressure, setOilPressure] = useState(15);
+  const [coolant_temperature, setCoolantTemp] = useState(80);
+  const [fuel_level, setFuelLevel] = useState(40);
+  const [battery_voltage, setBatteryVoltage] = useState(24);
+  const [charging_alternator_voltage, setChargeAltVoltage] = useState(27);
 
   // Example: update sensor data every 2 seconds.
   useEffect(() => {
@@ -30,7 +30,7 @@ const Engine = () => {
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-8">
         {/* Oil Pressure gauge: low and high pressures may be dangerous */}
         <Gauge
-          value={oilPressure}
+          value={oil_pressure}
           max={50}
           label="Oil Pressure"
           unit=" PSI"
@@ -43,7 +43,7 @@ const Engine = () => {
 
         {/* Coolant Temperature gauge: high temps are unsafe */}
         <Gauge
-          value={coolantTemp}
+          value={coolant_temperature}
           max={120}
           label="Coolant Temp"
           unit=" °C"
@@ -56,7 +56,7 @@ const Engine = () => {
 
         {/* Fuel Level gauge: lower fuel is dangerous */}
         <Gauge
-          value={fuelLevel}
+          value={fuel_level}
           max={100}
           label="Fuel Level"
           unit=" %"
@@ -69,7 +69,7 @@ const Engine = () => {
 
         {/* Battery Voltage gauge: voltages outside the expected range are risky */}
         <Gauge
-          value={batteryVoltage}
+          value={battery_voltage}
           max={30}
           label="Battery Voltage"
           unit=" V"
@@ -82,7 +82,7 @@ const Engine = () => {
 
         {/* Charge Alt Voltage gauge: similar configuration to battery */}
         <Gauge
-          value={chargeAltVoltage}
+          value={charging_alternator_voltage}
           max={30}
           label="Alt. Voltage"
           unit=" V"

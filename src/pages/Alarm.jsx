@@ -4,8 +4,8 @@ import { jsPDF } from 'jspdf';
 const Alarm = () => {
   const [sensorData] = useState({
     sensors: [],
-    lastShutdownTime: "",
-    electricTrip: "",
+    last_shutdown_time: "",
+    electric_trip: "",
   });
 
   // In a real application, this data might be fetched from an API/WebSocket.
@@ -102,8 +102,8 @@ const Alarm = () => {
       doc.text('No alarms triggered.', 10, yPosition);
       yPosition += 10;
     }
-    doc.text(`Last Shutdown Time: ${sensorData.lastShutdownTime}`, 10, yPosition + 10);
-    doc.text(`Electric Trip: ${sensorData.electricTrip}`, 10, yPosition + 20);
+    doc.text(`Last Shutdown Time: ${sensorData.last_shutdown_time}`, 10, yPosition + 10);
+    doc.text(`Electric Trip: ${sensorData.electric_trip}`, 10, yPosition + 20);
     doc.save('alarms_report.pdf');
   };
 
@@ -127,10 +127,10 @@ const Alarm = () => {
       {/* Display additional system status */}
       <div className="mb-4">
         <p>
-          <span className="font-semibold">Last Shutdown Time:</span> {sensorData.lastShutdownTime}
+          <span className="font-semibold">Last Shutdown Time:</span> {sensorData.last_shutdown_time}
         </p>
         <p>
-          <span className="font-semibold">Electric Trip:</span> {sensorData.electricTrip}
+          <span className="font-semibold">Electric Trip:</span> {sensorData.electric_trip}
         </p>
       </div>
 
