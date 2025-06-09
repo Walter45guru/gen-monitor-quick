@@ -3,7 +3,7 @@ import Gauge from '../components/Gauge';
 import { fetchGeneratorData } from '../api/generatorApi';
 
 const GeneratorPage = () => {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState<any>(null);
 
   useEffect(() => {
     const fetchData = async () => {
