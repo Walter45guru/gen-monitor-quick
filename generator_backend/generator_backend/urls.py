@@ -2,12 +2,8 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from corsheaders.views import CorsMiddleware
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('data_processor.urls')),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-
-# Add CORS middleware
-CorsMiddleware().process_response = lambda request, response: response 
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 
