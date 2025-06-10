@@ -1,32 +1,57 @@
 import React, { useEffect, useState } from 'react';
 import Gauge from '../components/Gauge';
-import { fetchGeneratorData } from '../api/generatorApi';
-
-// Removed unused generateRandomEngineData function
+import config from '../config';
 
 const Engine = () => {
   const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await fetchGeneratorData();
-      setData(result);
+      try {
+        const response = await fetch(`${config.API_URL}/api/latest-generator-data/`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch generator data');
+        }
+        const result = await response.json();
+        setData(result);
+        setError(null);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
     };
+
     fetchData();
     const interval = setInterval(fetchData, 8000);
     return () => clearInterval(interval);
   }, []);
 
-  if (!data) return <div>Loading...</div>;
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-800">
+        <div className="text-white text-xl">Loading...</div>
+      </div>
+    );
+  }
 
-  const {
-    oil_pressure,
-    coolant_temperature,
-    fuel_level,
-    battery_voltage,
-    charging_alternator_voltage,
-    start_attempts
-  } = data;
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-800">
+        <div className="text-red-500 text-xl">Error: {error}</div>
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-800">
+        <div className="text-white text-xl">No data available</div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-4 bg-gray-800 min-h-screen text-white">
@@ -35,12 +60,12 @@ const Engine = () => {
       <div className="mb-6 flex justify-center">
         <div className="bg-blue-700 rounded-lg px-6 py-3 shadow-lg text-center">
           <div className="text-lg font-semibold">Start Attempts</div>
-          <div className="text-3xl font-bold">{start_attempts}</div>
+          <div className="text-3xl font-bold">{data.start_attempts || 0}</div>
         </div>
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-8">
         <Gauge
-          value={oil_pressure}
+          value={data.oil_pressure || 0}
           max={50}
           label="Oil Pressure"
           unit=" PSI"
@@ -51,7 +76,7 @@ const Engine = () => {
           ]}
         />
         <Gauge
-          value={coolant_temperature}
+          value={data.coolant_temperature || 0}
           max={120}
           label="Coolant Temp"
           unit=" °C"
@@ -62,36 +87,36 @@ const Engine = () => {
           ]}
         />
         <Gauge
-          value={fuel_level}
-          max={100}
-          label="Fuel Level"
-          unit=" %"
-          zones={[
-            { min: 0, max: 20, color: "#ef4444" },
-            { min: 20, max: 50, color: "#f59e0b" },
-            { min: 50, max: 100, color: "#22c55e" },
-          ]}
-        />
-        <Gauge
-          value={battery_voltage}
-          max={30}
-          label="Battery Voltage"
+          value={data.battery_voltage || 0}
+          max={15}
+          label="Battery"
           unit=" V"
           zones={[
-            { min: 0, max: 18, color: "#ef4444" },
-            { min: 18, max: 24, color: "#22c55e" },
-            { min: 24, max: 30, color: "#f59e0b" },
+            { min: 0, max: 12, color: "#ef4444" },
+            { min: 12, max: 13.5, color: "#22c55e" },
+            { min: 13.5, max: 15, color: "#f59e0b" },
           ]}
         />
         <Gauge
-          value={charging_alternator_voltage}
-          max={30}
+          value={data.charging_alternator_voltage || 0}
+          max={15}
           label="Alt. Voltage"
           unit=" V"
           zones={[
-            { min: 0, max: 18, color: "#ef4444" },
-            { min: 18, max: 24, color: "#22c55e" },
-            { min: 24, max: 30, color: "#f59e0b" },
+            { min: 0, max: 12, color: "#ef4444" },
+            { min: 12, max: 13.5, color: "#22c55e" },
+            { min: 13.5, max: 15, color: "#f59e0b" },
+          ]}
+        />
+        <Gauge
+          value={data.average_engine_speed || 0}
+          max={3000}
+          label="Engine Speed"
+          unit=" RPM"
+          zones={[
+            { min: 0, max: 1000, color: "#ef4444" },
+            { min: 1000, max: 2500, color: "#22c55e" },
+            { min: 2500, max: 3000, color: "#f59e0b" },
           ]}
         />
       </div>
