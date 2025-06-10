@@ -1,32 +1,46 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Gauge from '../components/Gauge';
+import { fetchGeneratorData } from '../api/generatorApi';
 
 // Removed unused generateRandomEngineData function
 
 const Engine = () => {
-  // Generate 15 random data points on mount
-  // const [dummyData] = useState(() => Array.from({ length: 15 }, generateRandomEngineData));
-  // const [currentIndex, setCurrentIndex] = useState(0);
-  // const { oilPressure, coolantTemp, fuelLevel, batteryVoltage, chargeAltVoltage } = dummyData[currentIndex];
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setCurrentIndex((prev) => (prev + 1) % dummyData.length);
-  //   }, 8000); // 8 seconds
-  //   return () => clearInterval(interval);
-  // }, [dummyData.length]);
+  const [data, setData] = useState(null);
 
-  const [oilPressure] = useState(0);
-  const [coolantTemp] = useState(0);
-  const [fuelLevel] = useState(0);
-  const [batteryVoltage] = useState(0);
-  const [chargeAltVoltage] = useState(0);
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await fetchGeneratorData();
+      setData(result);
+    };
+    fetchData();
+    const interval = setInterval(fetchData, 8000);
+    return () => clearInterval(interval);
+  }, []);
+
+  if (!data) return <div>Loading...</div>;
+
+  const {
+    oil_pressure,
+    coolant_temperature,
+    fuel_level,
+    battery_voltage,
+    charging_alternator_voltage,
+    start_attempts
+  } = data;
 
   return (
     <div className="p-4 bg-gray-800 min-h-screen text-white">
       <h1 className="text-2xl font-bold mb-4">Engine Dashboard</h1>
+      {/* Start Attempts Placard */}
+      <div className="mb-6 flex justify-center">
+        <div className="bg-blue-700 rounded-lg px-6 py-3 shadow-lg text-center">
+          <div className="text-lg font-semibold">Start Attempts</div>
+          <div className="text-3xl font-bold">{start_attempts}</div>
+        </div>
+      </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-8">
         <Gauge
-          value={oilPressure}
+          value={oil_pressure}
           max={50}
           label="Oil Pressure"
           unit=" PSI"
@@ -37,7 +51,7 @@ const Engine = () => {
           ]}
         />
         <Gauge
-          value={coolantTemp}
+          value={coolant_temperature}
           max={120}
           label="Coolant Temp"
           unit=" °C"
@@ -48,7 +62,7 @@ const Engine = () => {
           ]}
         />
         <Gauge
-          value={fuelLevel}
+          value={fuel_level}
           max={100}
           label="Fuel Level"
           unit=" %"
@@ -59,7 +73,7 @@ const Engine = () => {
           ]}
         />
         <Gauge
-          value={batteryVoltage}
+          value={battery_voltage}
           max={30}
           label="Battery Voltage"
           unit=" V"
@@ -70,7 +84,7 @@ const Engine = () => {
           ]}
         />
         <Gauge
-          value={chargeAltVoltage}
+          value={charging_alternator_voltage}
           max={30}
           label="Alt. Voltage"
           unit=" V"
