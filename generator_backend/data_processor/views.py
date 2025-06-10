@@ -93,4 +93,15 @@ def generator_data_csv(request):
     writer.writerow(fields)
     for obj in queryset:
         writer.writerow([getattr(obj, f) for f in fields])
-    return response 
+    return response
+
+@api_view(['GET'])
+def get_latest_generator_data(request):
+    try:
+        latest_data = NewGeneratorData.objects.order_by('-timestamp').first()
+        if latest_data:
+            serializer = NewGeneratorDataSerializer(latest_data)
+            return Response(serializer.data)
+        return Response({'error': 'No data available'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST) 
