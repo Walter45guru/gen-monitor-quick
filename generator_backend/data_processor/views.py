@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import NewGeneratorData
 from .serializers import NewGeneratorDataSerializer
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.utils import timezone
 import csv
 
@@ -86,6 +86,7 @@ def generator_data_csv(request):
     days = min(max(days, 1), 30)  # Clamp between 1 and 30
     since = timezone.now() - timezone.timedelta(days=days)
     queryset = NewGeneratorData.objects.filter(timestamp__gte=since).order_by('-timestamp')
+
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = f'attachment; filename="generator_data_last_{days}_days.csv"'
     writer = csv.writer(response)
