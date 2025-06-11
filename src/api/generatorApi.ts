@@ -94,6 +94,7 @@ export interface GeneratorData {
     modbus_remote_start: 'Inactive' | 'Active';
     modbus_fault_reset: 'Inactive' | 'Active';
     network_shutdown_modbus_command: 'Inactive' | 'Active';
+    timestamp: string;
 }
 
 // Fetch latest generator data

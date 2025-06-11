@@ -8,10 +8,13 @@ const Report = () => {
   const handleDownload = async () => {
     try {
       setIsLoading(true);
+      const apiUrl = `${config.API_URL}/api/generator-data-csv/`;
+      console.log('Downloading CSV from:', apiUrl);
       const response = await axios.get(
-        `${config.API_URL}/api/generator-data-csv/`, 
+        apiUrl, 
         { responseType: 'blob' }
       );
+      console.log('CSV download response:', response);
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
@@ -21,6 +24,7 @@ const Report = () => {
       link.remove();
     } catch (error) {
       alert('Failed to download CSV. Please try again.');
+      console.error('CSV download error:', error);
     } finally {
       setIsLoading(false);
     }

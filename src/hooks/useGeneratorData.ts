@@ -57,4 +57,6 @@ export const useGeneratorData = () => {
         getEngineData,
         getGeneratorData
     };
-}; 
+};
+
+export default useGeneratorData; 
